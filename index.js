@@ -1,11 +1,8 @@
 module.exports = (app) => {
 
-  app.log('Yay, the app was loaded!')
+  app.log('app loaded')
 
   app.on('issues.opened', async (context) => {
-    // `context` extracts information from the event, which can be passed to
-    // GitHub API calls. This will return:
-    //   {owner: 'yourname', repo: 'yourrepo', number: 123, body: 'Hello World!}
 
     app.log('issue opened:', context.payload.issue);
 
@@ -23,7 +20,7 @@ module.exports = (app) => {
     app.log('searching for similar issues...');
 
     const searchResult = await context.github.search.issues({
-      q: `type:issue in:body ${urls}`,
+      q: `repo:"aragon/aragon-monthly" type:issue in:body ${urls}`,
       per_page: 100
     });
 
