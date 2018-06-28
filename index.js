@@ -10,8 +10,7 @@ module.exports = (app) => {
     const matches = context.payload.issue.body.match(/https?:\/\/[^\s]+/guis);
     const urls = matches.map(v => `"${v}"`).join(' ');
 
-    console.log('matches:', matches, urls);
-    console.log('urls:', urls);
+    console.log('matches:', matches);
 
     if (matches.length === 0) {
       app.log('no links found in issue, skipping...')
