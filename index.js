@@ -34,7 +34,7 @@ module.exports = (app) => {
 
     app.log('found results:', searchResult.data.items);
 
-    const issues = searchResult.data.items.map(item => item.url);
+    const issues = searchResult.data.items.map(item => item.html_url);
     const params = context.issue({
       body: `Similar issues were found containing the suggested URLs:\n\n ${issues.join('\n')}\n\n.Please, check if content is not a duplicate.\n\nThis is an automated response.`
     })
