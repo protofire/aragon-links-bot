@@ -6,6 +6,7 @@ module.exports = (app) => {
 
     app.log('issue opened:', context.payload.issue);
 
+    const repo = context.payload.repository.full_name;
     const matches = context.payload.issue.body.match(/https?:\/\/[^\s]+/guis);
     const urls = matches.map(v => `"${v}"`).join(' ');
 
@@ -20,7 +21,7 @@ module.exports = (app) => {
     app.log('searching for similar issues...');
 
     const searchResult = await context.github.search.issues({
-      q: `repo:"aragon/aragon-monthly" type:issue in:body ${urls}`,
+      q: `repo:"${repo}" type:issue in:body ${urls}`,
       per_page: 100
     });
 
