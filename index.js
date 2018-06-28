@@ -4,10 +4,13 @@ module.exports = (app) => {
 
   app.on('issues.opened', async (context) => {
 
-    app.log('issue opened:', context.payload.issue);
+    const { payload } = context;
 
-    const repo = context.payload.repository.full_name;
-    const matches = context.payload.issue.body.match(/https?:\/\/[^\s]+/guis);
+    app.log('issue opened:', payload.issue);
+
+    const repo = payload.repository.full_name;
+    const issueNumber = payload.issue.number;
+    const matches = payload.issue.body.match(/https?:\/\/[^\s]+/guis);
     const urls = matches.map(v => `"${v}"`).join(' ');
 
     console.log('matches:', matches);
@@ -31,7 +34,10 @@ module.exports = (app) => {
 
     app.log('found results:', searchResult.data.items);
 
-    const issues = searchResult.data.items.map(item => item.html_url);
+    const issues = searchResult.data.items
+      .filter(item => item.number !== issueNumber)
+      .map(item => item.html_url);
+
     const params = context.issue({
       body: `Similar issues were found containing the suggested URLs:\n\n ${issues.join('\n')}\n\nPlease, check if content is not a duplicate.\n\nThis is an automated response.`
     })
